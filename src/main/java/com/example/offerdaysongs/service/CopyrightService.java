@@ -1,5 +1,6 @@
 package com.example.offerdaysongs.service;
 
+import com.example.offerdaysongs.dto.CopyrightDto;
 import com.example.offerdaysongs.dto.requests.CreateCopyrightRequest;
 import com.example.offerdaysongs.model.Company;
 import com.example.offerdaysongs.model.Copyright;
@@ -14,19 +15,32 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+
+import static java.lang.System.Logger.Level.TRACE;
+import static java.util.stream.Collectors.toUnmodifiableList;
 
 @Service
 @RequiredArgsConstructor
 public class CopyrightService {
+    private static final System.Logger LOGGER = System.getLogger(CopyrightService.class.getName());
+
     private final CopyrightRepository copyrightRepository;
     private final CompanyRepository companyRepository;
     private final RecordingRepository recordingRepository;
     private final SingerRepository singerRepository;
     private final ModelMapper modelMapper;
 
+    public List<CopyrightDto> findAll() {
+        var rights = copyrightRepository.findAll();
+        LOGGER.log(TRACE, "found {0} rights", rights.size());
+        return rights.stream()
+                .map(this::toDto)
+                .collect(toUnmodifiableList());
+    }
+
     @Transactional
     public Copyright create(CreateCopyrightRequest request) {
-
         var copyright = new Copyright();
         copyright.setPeriodStart(request.getPeriodStart());
         copyright.setPeriodEnd(request.getPeriodEnd());
@@ -56,5 +70,9 @@ public class CopyrightService {
             copyright.setRecording(foundRecording);
         }
         return copyrightRepository.save(copyright);
+    }
+
+    private CopyrightDto toDto(Copyright copyright) {
+        return modelMapper.map(copyright, CopyrightDto.class);
     }
 }
