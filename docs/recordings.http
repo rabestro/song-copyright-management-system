@@ -1,0 +1,19 @@
+### GET request with a header
+GET http://localhost:8081/api/recordings/
+Accept: application/json
+
+###
+# @name create a recording
+
+POST http://localhost:8081/api/recordings/
+Content-Type: application/json
+
+{
+  "title": "The very first Song",
+  "version": "second",
+  "releaseTime": "2021-12-03T10:15:30+01:00",
+  "singer": {
+    "id": 1,
+    "name": "Madonna"
+  }
+}

@@ -1,0 +1,15 @@
+### get all copyrights
+GET http://localhost:8081/api/copyrights/
+Accept: application/json
+
+###
+POST http://localhost:80/api/copyrights/
+Content-Type: application/json
+
+{
+  "royalty": 0.99,
+  "periodStart": "2020-01-01",
+  "periodEnd": "2021-01-01"
+}
+
+###
