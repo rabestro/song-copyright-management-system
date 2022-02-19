@@ -1,11 +1,7 @@
 package com.example.offerdaysongs.service;
 
-import com.example.offerdaysongs.dto.CopyrightDto;
 import com.example.offerdaysongs.dto.requests.CreateCopyrightRequest;
-import com.example.offerdaysongs.model.Company;
 import com.example.offerdaysongs.model.Copyright;
-import com.example.offerdaysongs.model.Recording;
-import com.example.offerdaysongs.model.Singer;
 import com.example.offerdaysongs.repository.CompanyRepository;
 import com.example.offerdaysongs.repository.CopyrightRepository;
 import com.example.offerdaysongs.repository.RecordingRepository;
@@ -16,9 +12,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static java.lang.System.Logger.Level.TRACE;
-import static java.util.stream.Collectors.toUnmodifiableList;
 
 @Service
 @RequiredArgsConstructor
@@ -31,12 +27,10 @@ public class CopyrightService {
     private final SingerRepository singerRepository;
     private final ModelMapper modelMapper;
 
-    public List<CopyrightDto> findAll() {
+    public List<Copyright> findAll() {
         var rights = copyrightRepository.findAll();
         LOGGER.log(TRACE, "found {0} rights", rights.size());
-        return rights.stream()
-                .map(this::toDto)
-                .collect(toUnmodifiableList());
+        return rights;
     }
 
     @Transactional
@@ -46,33 +40,14 @@ public class CopyrightService {
         copyright.setPeriodEnd(request.getPeriodEnd());
         copyright.setRoyalty(request.getRoyalty());
 
-        Company companyDto = request.getCompany();
-        Recording recordingDto = request.getRecording();
-        Singer singerDto = request.getRecording().getSinger();
+        var company = companyRepository.findById(request.getCompany_id())
+                .orElseThrow(NoSuchElementException::new);
+        copyright.setCompany(company);
 
-        if (companyDto != null) {
-            Company foundCompany = companyRepository.findById(companyDto.getId()).orElseGet(() -> {
-                Company temp = new Company();
-                temp.setName(companyDto.getName());
-                return companyRepository.save(temp);
-            });
-            copyright.setCompany(foundCompany);
-        }
-        if (recordingDto != null) {
-            Recording foundRecording = recordingRepository.findById(recordingDto.getId()).orElseGet(() -> {
-                Recording temp = new Recording();
-                temp.setTitle(recordingDto.getTitle());
-                temp.setSinger(recordingDto.getSinger());
-                temp.setVersion(recordingDto.getVersion());
-                temp.setReleaseTime(recordingDto.getReleaseTime());
-                return recordingRepository.save(temp);
-            });
-            copyright.setRecording(foundRecording);
-        }
+        var recording = recordingRepository.findById(request.getRecording_id())
+                .orElseThrow(NoSuchElementException::new);
+        copyright.setRecording(recording);
         return copyrightRepository.save(copyright);
     }
 
-    private CopyrightDto toDto(Copyright copyright) {
-        return modelMapper.map(copyright, CopyrightDto.class);
-    }
 }

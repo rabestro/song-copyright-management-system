@@ -16,13 +16,11 @@ public class CompanyService {
         this.companyRepository = companyRepository;
     }
 
-    public List<Company> getAll()
-    {
+    public List<Company> getAll() {
         return companyRepository.findAll();
     }
 
-    public Company getById(long id)
-    {
+    public Company getById(long id) {
         return companyRepository.getById(id);
     }
 

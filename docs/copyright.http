@@ -3,13 +3,15 @@ GET http://localhost:8081/api/copyrights/
 Accept: application/json
 
 ###
-POST http://localhost:80/api/copyrights/
+POST http://localhost:8081/api/copyrights/
 Content-Type: application/json
 
 {
   "royalty": 0.99,
-  "periodStart": "2020-01-01",
-  "periodEnd": "2021-01-01"
+  "periodStart": "2022-01-01",
+  "periodEnd": "2023-01-01",
+  "company_id": 1,
+  "recording_id": 1
 }
 
 ###
