@@ -6,7 +6,7 @@ import com.example.offerdaysongs.dto.requests.UpdateCopyrightRequest;
 import com.example.offerdaysongs.exception.CompanyNotFoundException;
 import com.example.offerdaysongs.exception.RecordingNotFoundException;
 import com.example.offerdaysongs.model.Copyright;
-import com.example.offerdaysongs.service.CopyrightService;
+import com.example.offerdaysongs.service.CopyrightServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 import static java.util.stream.Collectors.toUnmodifiableList;
@@ -24,7 +25,7 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 @RequestMapping("api/copyrights")
 @RequiredArgsConstructor
 public class CopyrightController {
-    private final CopyrightService service;
+    private final CopyrightServiceImpl service;
 
     @GetMapping
     public List<CopyrightDto> findAll() {
@@ -68,6 +69,15 @@ public class CopyrightController {
     public ResponseEntity<?> update(@Valid @RequestBody UpdateCopyrightRequest updateCopyrightRequest) {
         service.update(updateCopyrightRequest);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/start={start}&&end={end}")
+    public List<CopyrightDto> findAllByPeriod(
+            @PathVariable(name = "start") LocalDate start,
+            @PathVariable(name = "end") LocalDate end) {
+        return service.findAllByPeriod(start, end).stream()
+                .map(this::convertToDto)
+                .collect(toUnmodifiableList());
     }
 
     private CopyrightDto convertToDto(Copyright copyright) {
