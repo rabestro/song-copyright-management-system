@@ -12,15 +12,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 import static java.lang.System.Logger.Level.TRACE;
-import static java.util.stream.Collectors.toUnmodifiableList;
 
-@Service
+@Service("copyrightService")
 @RequiredArgsConstructor
 public class CopyrightServiceImpl implements CopyrightService {
     private static final System.Logger LOGGER = System.getLogger(CopyrightServiceImpl.class.getName());
@@ -82,16 +81,11 @@ public class CopyrightServiceImpl implements CopyrightService {
         return copyrightRepository.findById(id);
     }
 
-    public List<Copyright> findAllByPeriod(LocalDate start, LocalDate end) {
+    public List<Copyright> findAllByPeriod(@NotNull LocalDate start, @NotNull LocalDate end) {
         if (start.isAfter(end)) {
             throw new IllegalArgumentException("Start date is later than end date");
         }
-        Predicate<Copyright> isActiveDuringPeriod = copyright ->
-                copyright.getPeriodStart().isBefore(end) && copyright.getPeriodEnd().isAfter(start);
-
-        return copyrightRepository.findAll().stream()
-                .filter(isActiveDuringPeriod)
-                .collect(toUnmodifiableList());
+        return copyrightRepository.findAllByPeriodStartBetweenOrPeriodEndBetween(start, end, start, end);
     }
 
 }

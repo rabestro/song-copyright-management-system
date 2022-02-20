@@ -19,4 +19,6 @@ public interface CopyrightRepository extends JpaRepository<Copyright, Long>, Jpa
     void update(BigDecimal royalty, LocalDate periodStart, LocalDate periodEnd, long id);
 
     List<Copyright> findAllByCompany(Company company);
+
+    List<Copyright> findAllByPeriodStartBetweenOrPeriodEndBetween(LocalDate a, LocalDate b, LocalDate c, LocalDate d);
 }
