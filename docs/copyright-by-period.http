@@ -1,0 +1,19 @@
+### get all copyright by period
+GET {{host}}/api/copyrights/period/2020-01-01/2022-12-31
+Accept: application/json
+
+> {%
+client.test("should find all copyright by period", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### get all copyright by period (empty)
+GET {{host}}/api/copyrights/period/2000-01-01/2001-12-31
+Accept: application/json
+
+> {%
+client.test("should returns an empty list", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}

@@ -1,0 +1,25 @@
+### find all recordings
+GET {{host}}/api/recordings/
+Accept: application/json
+
+### create a recording
+POST {{host}}/api/recordings/
+Content-Type: application/json
+
+{
+  "title": "The very first Song",
+  "version": "second",
+  "releaseTime": "2021-12-03T10:15:30+01:00",
+  "singer": {
+    "id": 1,
+    "name": "Madonna"
+  }
+}
+
+### request price for a record with one right for 2022
+GET {{host}}/api/recordings/price/1
+Accept: application/json
+
+### request price for a record with two rights for 2022
+GET {{host}}/api/recordings/price/2
+Accept: application/json

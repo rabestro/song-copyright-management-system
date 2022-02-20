@@ -1,0 +1,30 @@
+### get all copyrights
+GET {{host}}/api/copyrights/
+Accept: application/json
+
+> {%
+client.test("should get all copyrights", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### get copyright by id
+GET {{host}}/api/copyrights/id=1
+Accept: application/json
+
+> {%
+client.test("should find copyright by id", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### get all copyrights by company id
+GET {{host}}/api/copyrights/company_id=1
+Accept: application/json
+
+> {%
+client.test("should find all copyrights by company id", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
