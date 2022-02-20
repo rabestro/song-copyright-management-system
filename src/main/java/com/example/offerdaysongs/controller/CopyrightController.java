@@ -5,22 +5,28 @@ import com.example.offerdaysongs.dto.CopyrightDto;
 import com.example.offerdaysongs.dto.RecordingDto;
 import com.example.offerdaysongs.dto.SingerDto;
 import com.example.offerdaysongs.dto.requests.CreateCopyrightRequest;
+import com.example.offerdaysongs.exception.CompanyNotFoundException;
+import com.example.offerdaysongs.exception.RecordingNotFoundException;
 import com.example.offerdaysongs.model.Copyright;
 import com.example.offerdaysongs.service.CopyrightService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
+import javax.validation.Valid;
 import java.util.List;
 
 import static java.util.stream.Collectors.toUnmodifiableList;
 
+@Validated
 @RestController
 @RequestMapping("api/copyrights")
 @RequiredArgsConstructor
@@ -37,16 +43,26 @@ public class CopyrightController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Copyright> create(@RequestBody CreateCopyrightRequest createCopyrightRequest) {
-        Copyright copyright = service.create(createCopyrightRequest);
+    public ResponseEntity<Copyright> create(
+            @Valid @RequestBody CreateCopyrightRequest createCopyrightRequest
+    ) {
+//        if (result.hasErrors()) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, result.toString());
+//        }
+        try {
+            var copyright = service.create(createCopyrightRequest);
+            var location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("{id}")
+                    .buildAndExpand(copyright.getId())
+                    .toUri();
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("{id}")
-                .buildAndExpand(copyright.getId())
-                .toUri();
-
-        return ResponseEntity.created(location).body(copyright);
+            return ResponseEntity.created(location).body(copyright);
+        } catch (CompanyNotFoundException exception) {
+            throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, "company not found");
+        } catch (RecordingNotFoundException exception) {
+            throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, "recording not found");
+        }
     }
 
     private CopyrightDto convertToDto(Copyright copyright) {
