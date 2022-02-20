@@ -6,7 +6,7 @@ import com.example.offerdaysongs.dto.requests.UpdateCopyrightRequest;
 import com.example.offerdaysongs.exception.CompanyNotFoundException;
 import com.example.offerdaysongs.exception.RecordingNotFoundException;
 import com.example.offerdaysongs.model.Copyright;
-import com.example.offerdaysongs.service.CopyrightServiceImpl;
+import com.example.offerdaysongs.service.CopyrightService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 @RequestMapping("api/copyrights")
 @RequiredArgsConstructor
 public class CopyrightController {
-    private final CopyrightServiceImpl service;
+    private final CopyrightService service;
 
     @GetMapping
     public List<CopyrightDto> findAll() {
@@ -81,13 +81,14 @@ public class CopyrightController {
     }
 
     private CopyrightDto convertToDto(Copyright copyright) {
-        return new CopyrightDto(
-                copyright.getId(),
-                copyright.getRoyalty(),
-                copyright.getPeriodStart(),
-                copyright.getPeriodEnd(),
-                copyright.getCompany().getId(),
-                copyright.getRecording().getId());
+        return CopyrightDto.builder()
+                .id(copyright.getId())
+                .royalty(copyright.getRoyalty())
+                .periodStart(copyright.getPeriodStart())
+                .periodEnd(copyright.getPeriodEnd())
+                .company_id(copyright.getCompany().getId())
+                .recording_id(copyright.getRecording().getId())
+                .build();
     }
 
 }
