@@ -8,7 +8,6 @@ import com.example.offerdaysongs.model.Copyright;
 import com.example.offerdaysongs.repository.CompanyRepository;
 import com.example.offerdaysongs.repository.CopyrightRepository;
 import com.example.offerdaysongs.repository.RecordingRepository;
-import com.example.offerdaysongs.repository.SingerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +28,6 @@ public class CopyrightServiceImpl implements CopyrightService {
     private final CopyrightRepository copyrightRepository;
     private final CompanyRepository companyRepository;
     private final RecordingRepository recordingRepository;
-    private final SingerRepository singerRepository;
 
     public List<Copyright> findAll() {
         var rights = copyrightRepository.findAll();

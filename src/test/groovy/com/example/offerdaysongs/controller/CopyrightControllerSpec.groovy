@@ -30,7 +30,7 @@ class CopyrightControllerSpec extends Specification {
         given:
         copyrightService.findAll() >> [new Copyright(royalty: 0.99, company: company, recording: recording)]
 
-        expect: "Status is 200 and the response is 'Hello world!'"
+        expect: "Status is 200 and the response contains '0.99'"
         mvc.perform(get("/api/copyrights/"))
                 .andExpect(status().isOk())
                 .andReturn()
