@@ -1,9 +1,6 @@
 package com.example.offerdaysongs.controller;
 
-import com.example.offerdaysongs.dto.CompanyDto;
 import com.example.offerdaysongs.dto.CopyrightDto;
-import com.example.offerdaysongs.dto.RecordingDto;
-import com.example.offerdaysongs.dto.SingerDto;
 import com.example.offerdaysongs.dto.requests.CreateCopyrightRequest;
 import com.example.offerdaysongs.exception.CompanyNotFoundException;
 import com.example.offerdaysongs.exception.RecordingNotFoundException;
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -43,21 +39,9 @@ public class CopyrightController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Copyright> create(
-            @Valid @RequestBody CreateCopyrightRequest createCopyrightRequest
-    ) {
-//        if (result.hasErrors()) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, result.toString());
-//        }
+    public CopyrightDto create(@Valid @RequestBody CreateCopyrightRequest createCopyrightRequest) {
         try {
-            var copyright = service.create(createCopyrightRequest);
-            var location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("{id}")
-                    .buildAndExpand(copyright.getId())
-                    .toUri();
-
-            return ResponseEntity.created(location).body(copyright);
+            return convertToDto(service.create(createCopyrightRequest));
         } catch (CompanyNotFoundException exception) {
             throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, "company not found");
         } catch (RecordingNotFoundException exception) {
@@ -66,21 +50,13 @@ public class CopyrightController {
     }
 
     private CopyrightDto convertToDto(Copyright copyright) {
-        var companyDto = new CompanyDto(copyright.getCompany().getId(), copyright.getCompany().getName());
-        var recording = copyright.getRecording();
-        var singer = copyright.getRecording().getSinger();
-        var recordingDto = new RecordingDto(recording.getId(),
-                recording.getTitle(),
-                recording.getVersion(),
-                recording.getReleaseTime(),
-                singer != null ? new SingerDto(singer.getId(), singer.getName()) : null);
-
         return new CopyrightDto(
                 copyright.getId(),
                 copyright.getRoyalty(),
                 copyright.getPeriodStart(),
                 copyright.getPeriodEnd(),
-                companyDto, recordingDto);
+                copyright.getCompany().getId(),
+                copyright.getRecording().getId());
     }
 
 }
