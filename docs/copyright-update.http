@@ -18,3 +18,21 @@ client.test("get copyright by id", function() {
   client.assert(response.status === 200, "Response status is not 200");
 });
 %}
+
+### validate negative royalty
+PUT http://localhost:8080/api/copyrights/
+Content-Type: application/json
+
+{
+  "id": 1,
+  "royalty": -0.99,
+  "periodStart": "2022-01-01",
+  "periodEnd": "2023-01-01"
+}
+
+
+> {%
+client.test("royalty must be positive or zero", function() {
+  client.assert(response.status === 400, "Response status is not 400");
+});
+%}
