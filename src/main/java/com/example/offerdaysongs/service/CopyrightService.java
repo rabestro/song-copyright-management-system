@@ -1,18 +1,18 @@
 package com.example.offerdaysongs.service;
 
 import com.example.offerdaysongs.dto.requests.CreateCopyrightRequest;
+import com.example.offerdaysongs.exception.CompanyNotFoundException;
+import com.example.offerdaysongs.exception.RecordingNotFoundException;
 import com.example.offerdaysongs.model.Copyright;
 import com.example.offerdaysongs.repository.CompanyRepository;
 import com.example.offerdaysongs.repository.CopyrightRepository;
 import com.example.offerdaysongs.repository.RecordingRepository;
 import com.example.offerdaysongs.repository.SingerRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static java.lang.System.Logger.Level.TRACE;
 
@@ -25,7 +25,6 @@ public class CopyrightService {
     private final CompanyRepository companyRepository;
     private final RecordingRepository recordingRepository;
     private final SingerRepository singerRepository;
-    private final ModelMapper modelMapper;
 
     public List<Copyright> findAll() {
         var rights = copyrightRepository.findAll();
@@ -40,13 +39,18 @@ public class CopyrightService {
         copyright.setPeriodEnd(request.getPeriodEnd());
         copyright.setRoyalty(request.getRoyalty());
 
-        var company = companyRepository.findById(request.getCompany_id())
-                .orElseThrow(NoSuchElementException::new);
+        var company = companyRepository
+                .findById(request.getCompany_id())
+                .orElseThrow(CompanyNotFoundException::new);
+
         copyright.setCompany(company);
 
-        var recording = recordingRepository.findById(request.getRecording_id())
-                .orElseThrow(NoSuchElementException::new);
+        var recording = recordingRepository
+                .findById(request.getRecording_id())
+                .orElseThrow(RecordingNotFoundException::new);
+
         copyright.setRecording(recording);
+
         return copyrightRepository.save(copyright);
     }
 
