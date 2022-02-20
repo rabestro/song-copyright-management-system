@@ -4,6 +4,7 @@ import com.example.offerdaysongs.dto.RecordingDto;
 import com.example.offerdaysongs.dto.SingerDto;
 import com.example.offerdaysongs.dto.requests.CreateRecordingRequest;
 import com.example.offerdaysongs.model.Recording;
+import com.example.offerdaysongs.service.CopyrightService;
 import com.example.offerdaysongs.service.RecordingService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,9 +23,11 @@ import java.util.stream.Collectors;
 public class RecordingController {
     private static final String ID = "id";
     private final RecordingService recordingService;
+    private final CopyrightService copyrightService;
 
-    public RecordingController(RecordingService recordingService) {
+    public RecordingController(RecordingService recordingService, CopyrightService copyrightService) {
         this.recordingService = recordingService;
+        this.copyrightService = copyrightService;
     }
 
     @GetMapping("/")
@@ -36,6 +41,11 @@ public class RecordingController {
     public RecordingDto get(@PathVariable(ID) long id) {
         var recording = recordingService.getById(id);
         return convertToDto(recording);
+    }
+
+    @GetMapping("/price/{id:[\\d]+}")
+    public BigDecimal getPrice(@PathVariable(ID) long id) {
+        return copyrightService.getRecordingPrice(id, LocalDate.now());
     }
 
     @PostMapping("/")

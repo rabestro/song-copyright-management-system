@@ -2,6 +2,7 @@ package com.example.offerdaysongs.repository;
 
 import com.example.offerdaysongs.model.Company;
 import com.example.offerdaysongs.model.Copyright;
+import com.example.offerdaysongs.model.Recording;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -21,4 +22,6 @@ public interface CopyrightRepository extends JpaRepository<Copyright, Long>, Jpa
     List<Copyright> findAllByCompany(Company company);
 
     List<Copyright> findAllByStartBetweenOrEndBetween(LocalDate a, LocalDate b, LocalDate c, LocalDate d);
+
+    List<Copyright> findAllByRecordingAndStartBeforeAndEndAfter(Recording recording, LocalDate a, LocalDate b);
 }

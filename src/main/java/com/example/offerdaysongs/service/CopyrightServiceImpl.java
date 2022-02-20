@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -89,6 +90,16 @@ public class CopyrightServiceImpl implements CopyrightService {
         var activeCopyrights = copyrightRepository.findAllByStartBetweenOrEndBetween(start, end, start, end);
         LOGGER.log(TRACE, "found {0} active copyrights", activeCopyrights.size());
         return activeCopyrights;
+    }
+
+    public BigDecimal getRecordingPrice(long recording_id, LocalDate date) {
+        var recording = recordingRepository
+                .findById(recording_id)
+                .orElseThrow(RecordingNotFoundException::new);
+
+        return copyrightRepository.findAllByRecordingAndStartBeforeAndEndAfter(recording, date, date).stream()
+                .map(Copyright::getRoyalty)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
 }

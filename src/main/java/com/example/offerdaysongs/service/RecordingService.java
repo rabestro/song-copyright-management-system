@@ -15,8 +15,7 @@ public class RecordingService {
     private final RecordingRepository recordingRepository;
     private final SingerRepository singerRepository;
 
-    public RecordingService(RecordingRepository recordingRepository,
-                            SingerRepository singerRepository) {
+    public RecordingService(RecordingRepository recordingRepository, SingerRepository singerRepository) {
         this.recordingRepository = recordingRepository;
         this.singerRepository = singerRepository;
     }

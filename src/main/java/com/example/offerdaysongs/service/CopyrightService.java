@@ -4,6 +4,7 @@ import com.example.offerdaysongs.dto.requests.CreateCopyrightRequest;
 import com.example.offerdaysongs.dto.requests.UpdateCopyrightRequest;
 import com.example.offerdaysongs.model.Copyright;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -22,4 +23,6 @@ public interface CopyrightService {
     void update(UpdateCopyrightRequest request);
 
     List<Copyright> findAllByPeriod(LocalDate start, LocalDate end);
+
+    BigDecimal getRecordingPrice(long recording_id, LocalDate date);
 }

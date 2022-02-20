@@ -1,11 +1,9 @@
-### GET request with a header
-GET http://localhost:8081/api/recordings/
+### find all recordings
+GET {{host}}/api/recordings/
 Accept: application/json
 
-###
-# @name create a recording
-
-POST http://localhost:8081/api/recordings/
+### create a recording
+POST {{host}}/api/recordings/
 Content-Type: application/json
 
 {
@@ -17,3 +15,11 @@ Content-Type: application/json
     "name": "Madonna"
   }
 }
+
+### request price for a record with one right for 2022
+GET {{host}}/api/recordings/price/1
+Accept: application/json
+
+### request price for a record with two rights for 2022
+GET {{host}}/api/recordings/price/2
+Accept: application/json

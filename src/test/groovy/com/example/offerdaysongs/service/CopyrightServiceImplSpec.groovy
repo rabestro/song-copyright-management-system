@@ -48,7 +48,4 @@ class CopyrightServiceImplSpec extends Specification {
         2  | new Copyright(id: id, royalty: 1.99)
     }
 
-    def 'should find all active copyrights for a period'() {
-
-    }
 }
