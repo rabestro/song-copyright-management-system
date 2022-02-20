@@ -33,6 +33,12 @@ public class CopyrightService {
         return rights;
     }
 
+    public List<Copyright> findAllByCompany(long company_id) {
+        return companyRepository.findById(company_id)
+                .map(copyrightRepository::findAllByCompany)
+                .orElse(List.of());
+    }
+
     @Transactional
     public Copyright create(CreateCopyrightRequest request) {
         var copyright = new Copyright();

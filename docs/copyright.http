@@ -13,11 +13,11 @@ POST http://localhost:8080/api/copyrights/
 Content-Type: application/json
 
 {
-  "royalty": 0.99,
+  "royalty": 1.99,
   "periodStart": "2022-01-01",
   "periodEnd": "2023-01-01",
-  "company_id": 1,
-  "recording_id": 1
+  "company_id": 2,
+  "recording_id": 2
 }
 
 ### get copyright by id
@@ -26,6 +26,16 @@ Accept: application/json
 
 > {%
 client.test("get copyright by id", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### get all copyrights by company id
+GET http://localhost:8080/api/copyrights/company_id=1
+Accept: application/json
+
+> {%
+client.test("Request executed successfully", function() {
   client.assert(response.status === 200, "Response status is not 200");
 });
 %}

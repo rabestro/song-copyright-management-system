@@ -43,6 +43,13 @@ public class CopyrightController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "copyright not found"));
     }
 
+    @GetMapping("/company_id={id}")
+    public List<CopyrightDto> findAllByCompany(@PathVariable long id) {
+        return service.findAllByCompany(id).stream()
+                .map(this::convertToDto)
+                .collect(toUnmodifiableList());
+    }
+
     @PostMapping("/")
     public CopyrightDto create(@Valid @RequestBody CreateCopyrightRequest createCopyrightRequest) {
         try {
