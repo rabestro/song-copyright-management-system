@@ -1,27 +1,15 @@
 ### get all copyrights
-GET http://localhost:8080/api/copyrights/
+GET {{host}}/api/copyrights/
 Accept: application/json
 
 > {%
-client.test("Request executed successfully", function() {
+client.test("should get all copyrights", function() {
   client.assert(response.status === 200, "Response status is not 200");
 });
 %}
 
-### create copyright
-POST http://localhost:8080/api/copyrights/
-Content-Type: application/json
-
-{
-  "royalty": 1.99,
-  "periodStart": "2022-01-01",
-  "periodEnd": "2023-01-01",
-  "company_id": 2,
-  "recording_id": 2
-}
-
 ### get copyright by id
-GET http://localhost:8080/api/copyrights/id=1
+GET {{host}}/api/copyrights/id=1
 Accept: application/json
 
 > {%
@@ -31,7 +19,7 @@ client.test("get copyright by id", function() {
 %}
 
 ### get all copyrights by company id
-GET http://localhost:8080/api/copyrights/company_id=1
+GET {{host}}/api/copyrights/company_id=1
 Accept: application/json
 
 > {%

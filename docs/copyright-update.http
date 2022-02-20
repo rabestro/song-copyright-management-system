@@ -1,16 +1,16 @@
 ### update copyright
-PUT http://localhost:8080/api/copyrights/
+PUT {{host}}/api/copyrights/
 Content-Type: application/json
 
 {
   "id": 1,
-  "royalty": 1.99,
+  "royalty": 2.99,
   "periodStart": "2022-01-01",
   "periodEnd": "2023-01-01"
 }
 
 ### get copyright by id
-GET http://localhost:8080/api/copyrights/id=1
+GET {{host}}/api/copyrights/id=1
 Accept: application/json
 
 > {%
@@ -20,7 +20,7 @@ client.test("get copyright by id", function() {
 %}
 
 ### validate negative royalty
-PUT http://localhost:8080/api/copyrights/
+PUT {{host}}/api/copyrights/
 Content-Type: application/json
 
 {

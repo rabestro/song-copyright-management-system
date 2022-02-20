@@ -1,5 +1,5 @@
 ### negative royalty
-POST http://localhost:8080/api/copyrights/
+POST {{host}}/api/copyrights/
 Content-Type: application/json
 
 {
@@ -11,13 +11,13 @@ Content-Type: application/json
 }
 
 > {%
-client.test("royalty must be positive or zero", function() {
+client.test("should validate royalty and it must be positive or zero", function() {
   client.assert(response.status === 400, "Response status is not 400");
 });
 %}
 
 ### invalid company id
-POST http://localhost:8080/api/copyrights/
+POST {{host}}/api/copyrights/
 Content-Type: application/json
 
 {
@@ -29,13 +29,13 @@ Content-Type: application/json
 }
 
 > {%
-client.test("Invalid company id", function() {
+client.test("should validate company id", function() {
   client.assert(response.status === 424, "Response status is not 424");
 });
 %}
 
 ### invalid recording id
-POST http://localhost:8080/api/copyrights/
+POST {{host}}/api/copyrights/
 Content-Type: application/json
 
 {
@@ -47,13 +47,13 @@ Content-Type: application/json
 }
 
 > {%
-client.test("Invalid recording id", function() {
+client.test("should validate recording id", function() {
   client.assert(response.status === 424, "Response status is not 424");
 });
 %}
 
 ### empty period start
-POST http://localhost:8080/api/copyrights/
+POST {{host}}/api/copyrights/
 Content-Type: application/json
 
 {
@@ -65,7 +65,7 @@ Content-Type: application/json
 }
 
 > {%
-client.test("period start must not be empty", function() {
+client.test("should validate period start", function() {
   client.assert(response.status === 400, "Response status is not 400");
 });
 %}
