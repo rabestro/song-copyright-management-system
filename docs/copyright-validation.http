@@ -1,0 +1,72 @@
+### negative royalty
+POST http://localhost:8080/api/copyrights/
+Content-Type: application/json
+
+{
+  "royalty": -3.99,
+  "periodStart": "2022-01-01",
+  "periodEnd": "2023-01-01",
+  "company_id": 1,
+  "recording_id": 1
+}
+
+> {%
+client.test("royalty must be positive or zero", function() {
+  client.assert(response.status === 400, "Response status is not 400");
+});
+%}
+
+### invalid company id
+POST http://localhost:8080/api/copyrights/
+Content-Type: application/json
+
+{
+  "royalty": 0.99,
+  "periodStart": "2022-01-01",
+  "periodEnd": "2023-01-01",
+  "company_id": -1,
+  "recording_id": 1
+}
+
+> {%
+client.test("Invalid company id", function() {
+  client.assert(response.status === 424, "Response status is not 424");
+});
+%}
+
+### invalid recording id
+POST http://localhost:8080/api/copyrights/
+Content-Type: application/json
+
+{
+  "royalty": 0.99,
+  "periodStart": "2022-01-01",
+  "periodEnd": "2023-01-01",
+  "company_id": 1,
+  "recording_id": -1
+}
+
+> {%
+client.test("Invalid recording id", function() {
+  client.assert(response.status === 424, "Response status is not 424");
+});
+%}
+
+### empty period start
+POST http://localhost:8080/api/copyrights/
+Content-Type: application/json
+
+{
+  "royalty": 1.99,
+  "periodStart": null,
+  "periodEnd": "2023-01-01",
+  "company_id": 1,
+  "recording_id": 1
+}
+
+> {%
+client.test("period start must not be empty", function() {
+  client.assert(response.status === 400, "Response status is not 400");
+});
+%}
+

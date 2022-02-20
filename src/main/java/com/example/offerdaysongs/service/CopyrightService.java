@@ -1,6 +1,7 @@
 package com.example.offerdaysongs.service;
 
 import com.example.offerdaysongs.dto.requests.CreateCopyrightRequest;
+import com.example.offerdaysongs.dto.requests.UpdateCopyrightRequest;
 import com.example.offerdaysongs.exception.CompanyNotFoundException;
 import com.example.offerdaysongs.exception.RecordingNotFoundException;
 import com.example.offerdaysongs.model.Copyright;
@@ -59,6 +60,21 @@ public class CopyrightService {
         copyright.setRecording(recording);
 
         return copyrightRepository.save(copyright);
+    }
+
+    @Transactional
+    public void deleteById(long id) {
+        copyrightRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void update(UpdateCopyrightRequest request) {
+        copyrightRepository.update(
+                request.getRoyalty(),
+                request.getPeriodStart(),
+                request.getPeriodEnd(),
+                request.getId()
+        );
     }
 
     public Optional<Copyright> findById(long id) {
