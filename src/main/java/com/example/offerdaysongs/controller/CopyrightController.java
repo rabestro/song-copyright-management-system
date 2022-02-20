@@ -8,6 +8,7 @@ import com.example.offerdaysongs.exception.RecordingNotFoundException;
 import com.example.offerdaysongs.model.Copyright;
 import com.example.offerdaysongs.service.CopyrightService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -71,10 +72,10 @@ public class CopyrightController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/start={start}&&end={end}")
+    @GetMapping("/period/{start}/{end}")
     public List<CopyrightDto> findAllByPeriod(
-            @PathVariable(name = "start") LocalDate start,
-            @PathVariable(name = "end") LocalDate end) {
+            @PathVariable(name = "start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @PathVariable(name = "end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
         return service.findAllByPeriod(start, end).stream()
                 .map(this::convertToDto)
                 .collect(toUnmodifiableList());
@@ -84,8 +85,8 @@ public class CopyrightController {
         return CopyrightDto.builder()
                 .id(copyright.getId())
                 .royalty(copyright.getRoyalty())
-                .periodStart(copyright.getPeriodStart())
-                .periodEnd(copyright.getPeriodEnd())
+                .periodStart(copyright.getStart())
+                .periodEnd(copyright.getEnd())
                 .company_id(copyright.getCompany().getId())
                 .recording_id(copyright.getRecording().getId())
                 .build();

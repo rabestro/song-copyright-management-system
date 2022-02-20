@@ -25,10 +25,11 @@ VALUES ('SN 126', 'Bad Guy', '1', '2019-01-15', 3);
 INSERT INTO recording (song_code, title, version, release_time, singer_id)
 VALUES ('SN 127', 'Nothing else matters', '1', '1991-01-15', 4);
 
-INSERT INTO copyright (royalty, period_start, period_end, recording_id, company_id)
+INSERT INTO copyright (royalty, start, end, recording_id, company_id)
 VALUES (0.99, '2022-01-01', '2022-03-31', 1, 1),
        (0.99, '2022-04-01', '2022-12-31', 1, 2),
        (0.99, '2022-01-01', '2022-12-31', 2, 3),
-       (0.99, '2022-01-01', '2023-12-31', 2, 1)
+       (0.99, '2022-01-01', '2023-12-31', 2, 1);
+
 commit;
 

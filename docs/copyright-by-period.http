@@ -1,5 +1,5 @@
 ### get all copyright by period
-GET {{host}}/api/copyrights/?start=2020-01-01&end=2022-12-31
+GET {{host}}/api/copyrights/period/2020-01-01/2022-12-31
 Accept: application/json
 
 > {%
@@ -9,7 +9,7 @@ client.test("should find all copyright by period", function() {
 %}
 
 ### get all copyright by period (empty)
-GET {{host}}/api/copyrights/?start=2000-01-01&end=2001-12-31
+GET {{host}}/api/copyrights/period/2000-01-01/2001-12-31
 Accept: application/json
 
 > {%

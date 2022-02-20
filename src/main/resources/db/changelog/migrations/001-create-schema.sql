@@ -24,8 +24,8 @@ CREATE TABLE copyright
 (
     id           BIGSERIAL PRIMARY KEY,
     royalty      NUMERIC,
-    period_start DATE,
-    period_end   DATE,
+    start        DATE,
+    end          DATE,
     recording_id BIGINT REFERENCES recording (id),
     company_id   BIGINT REFERENCES company (id)
 );

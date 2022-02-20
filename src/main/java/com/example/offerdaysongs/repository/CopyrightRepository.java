@@ -15,10 +15,10 @@ import java.util.List;
 @Repository
 public interface CopyrightRepository extends JpaRepository<Copyright, Long>, JpaSpecificationExecutor<Copyright> {
     @Modifying
-    @Query("update Copyright c set c.royalty = ?1, c.periodStart = ?2, c.periodEnd = ?3 where c.id = ?4")
+    @Query("update Copyright c set c.royalty = ?1, c.start = ?2, c.end = ?3 where c.id = ?4")
     void update(BigDecimal royalty, LocalDate periodStart, LocalDate periodEnd, long id);
 
     List<Copyright> findAllByCompany(Company company);
 
-    List<Copyright> findAllByPeriodStartBetweenOrPeriodEndBetween(LocalDate a, LocalDate b, LocalDate c, LocalDate d);
+    List<Copyright> findAllByStartBetweenOrEndBetween(LocalDate a, LocalDate b, LocalDate c, LocalDate d);
 }

@@ -21,12 +21,12 @@ public class Copyright {
     BigDecimal royalty;
 
     @NotNull
-    @Column(name = "period_start")
-    LocalDate periodStart;
+    @Column(name = "start")
+    LocalDate start;
 
     @NotNull
-    @Column(name = "period_end")
-    LocalDate periodEnd;
+    @Column(name = "end")
+    LocalDate end;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

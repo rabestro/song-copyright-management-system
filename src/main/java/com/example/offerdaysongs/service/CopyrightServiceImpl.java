@@ -43,8 +43,8 @@ public class CopyrightServiceImpl implements CopyrightService {
     @Transactional
     public Copyright create(CreateCopyrightRequest request) {
         var copyright = new Copyright();
-        copyright.setPeriodStart(request.getPeriodStart());
-        copyright.setPeriodEnd(request.getPeriodEnd());
+        copyright.setStart(request.getPeriodStart());
+        copyright.setEnd(request.getPeriodEnd());
         copyright.setRoyalty(request.getRoyalty());
 
         var company = companyRepository
@@ -85,7 +85,10 @@ public class CopyrightServiceImpl implements CopyrightService {
         if (start.isAfter(end)) {
             throw new IllegalArgumentException("Start date is later than end date");
         }
-        return copyrightRepository.findAllByPeriodStartBetweenOrPeriodEndBetween(start, end, start, end);
+        LOGGER.log(TRACE, "find active copyrights for period {0} - {1}", start, end);
+        var activeCopyrights = copyrightRepository.findAllByStartBetweenOrEndBetween(start, end, start, end);
+        LOGGER.log(TRACE, "found {0} active copyrights", activeCopyrights.size());
+        return activeCopyrights;
     }
 
 }
