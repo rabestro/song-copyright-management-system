@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 import static java.lang.System.Logger.Level.TRACE;
 
@@ -52,6 +53,10 @@ public class CopyrightService {
         copyright.setRecording(recording);
 
         return copyrightRepository.save(copyright);
+    }
+
+    public Optional<Copyright> findById(long id) {
+        return copyrightRepository.findById(id);
     }
 
 }
